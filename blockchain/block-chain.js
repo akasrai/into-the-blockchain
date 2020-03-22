@@ -14,10 +14,28 @@ class BlockChain {
   };
 
   addBlock = newBlock => {
+    newBlock.previousHash = this.getLatestBlock().hash;
     newBlock.hash = newBlock.calculateHash();
-    newBlock.prevHash = this.getLatestBlock().hash;
 
     this.chain.push(newBlock);
+  };
+
+  isChainValid = () => {
+    for (let i = 1; i < this.chain.length; i++) {
+      const currentBlock = this.chain[i];
+      const previousBlock = this.chain[i - 1];
+
+      if (!this.isDataValid(currentBlock, previousBlock)) return false;
+    }
+
+    return true;
+  };
+
+  isDataValid = (currentBlock, previousBlock) => {
+    if (currentBlock.hash !== currentBlock.calculateHash()) return false;
+    if (currentBlock.previousHash !== previousBlock.hash) return false;
+
+    return true;
   };
 }
 
