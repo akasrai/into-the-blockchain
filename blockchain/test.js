@@ -1,19 +1,19 @@
-const { Block } = require('./block');
 const { BlockChain } = require('./block-chain');
+const { Transaction } = require('./transaction');
 
 let customCoin = new BlockChain();
 
-console.log('mining block 1...');
-customCoin.addBlock(new Block(1, new Date().toLocaleString(), { amount: 100 }));
+customCoin.createTransaction(new Transaction('address1', 'address2', 300));
+customCoin.createTransaction(new Transaction('address2', 'address1', 600));
 
-console.log('mining block 2...');
-customCoin.addBlock(new Block(2, new Date().toLocaleString(), { amount: 200 }));
+console.log('Starting mining');
+customCoin.minePendingTransaction('akash');
 
-// console.log(JSON.stringify(customCoin, null, 4));
-
+console.log('Balnce of akash', customCoin.getBalanceOfAddress('akash'));
 console.log('Is blockchain valid?', customCoin.isChainValid());
 
-customCoin.chain[2].data = { amount: 500 };
-customCoin.chain[2].calculateHash();
+console.log('Mining again');
+customCoin.minePendingTransaction('akash');
 
+console.log('Balnce of akash', customCoin.getBalanceOfAddress('akash'));
 console.log('Is blockchain valid?', customCoin.isChainValid());
