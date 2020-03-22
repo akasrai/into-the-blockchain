@@ -9,5 +9,8 @@
   "keywords": [
     "blockchain"
   ],
-  "author": "akasky70@gmail.com"
+  "author": "akasky70@gmail.com",
+  "dependencies": {
+    "crypto-js": "^4.0.0"
+  }
 }
