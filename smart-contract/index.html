@@ -15,6 +15,8 @@
     <script src="js/web3.min.js"></script>
 
     <script>
+      if (window.ethereum) ethereum.enable();
+
       $(document).ready(function() {
         var address = '0xA3935A7aa34dF7D2C83875E1BF3b2b1F282E9280';
         var abi = [
@@ -68,7 +70,7 @@
           }
         ];
 
-        web3 = new Web3(web3.currentProvider);
+        if (window.ethereum) web3 = new Web3(ethereum);
 
         var contract = new web3.eth.Contract(abi, address);
 
@@ -82,23 +84,58 @@
         }
 
         $('#deposit').click(function() {
-          var amount = $('#amount').val();
-          alert(amount);
-          contract.methods
-            .deposit(amount)
-            .call()
-            .then(function() {
-              getBalance();
+          var amount = parseInt($('#amount').val());
+
+          web3.eth
+            .getAccounts()
+            .then(function(accounts) {
+              var acc = accounts[0];
+
+              return contract.methods
+                .deposit(amount)
+                .send({ from: acc })
+                .then(function(res) {
+                  console.log(res);
+                  return getBalance();
+                })
+                .catch(function(err) {
+                  console.log(err);
+                });
+            })
+            .then(function(tx) {
+              console.log(tx);
+              return getBalance();
+            })
+            .catch(function(err) {
+              console.log(err);
             });
         });
 
         $('#widraw').click(function() {
-          var amount = $('#amount').val();
-          contract.methods
-            .widraw(amount)
-            .call()
-            .then(function() {
-              getBalance();
+          var amount = parseInt($('#amount').val());
+
+          web3.eth
+            .getAccounts()
+            .then(function(accounts) {
+              var acc = accounts[0];
+
+              return contract.methods
+                .widraw(amount)
+                .send({ from: acc })
+                .then(function(res) {
+                  console.log(res);
+                  return getBalance();
+                })
+                .catch(function(err) {
+                  console.log(err);
+                });
+            })
+            .then(function(tx) {
+              console.log(tx);
+              return getBalance();
+            })
+            .catch(function(err) {
+              console.log(err);
             });
         });
 
