@@ -15,10 +15,14 @@
     <script src="js/web3.min.js"></script>
 
     <script>
+      // MetaMask extension authorization
       if (window.ethereum) ethereum.enable();
 
       $(document).ready(function() {
+        // Address of smart-contract deployed in https://remix.ethereum.org/
         var address = '0xA3935A7aa34dF7D2C83875E1BF3b2b1F282E9280';
+
+        // abi of smart-contract deployed in https://remix.ethereum.org/
         var abi = [
           {
             constant: false,
@@ -72,10 +76,11 @@
 
         if (window.ethereum) web3 = new Web3(ethereum);
 
+        // get the smart-contract
         var contract = new web3.eth.Contract(abi, address);
 
         function getBalance() {
-          contract.methods
+          return contract.methods
             .getBalance()
             .call()
             .then(function(bal) {
