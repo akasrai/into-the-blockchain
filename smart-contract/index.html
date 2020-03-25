@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Contract</title>
+  </head>
+  <body>
+    <input type="text" id="amount" />
+    <p id="balance"></p>
+    <button id="deposit">Deposit</button>
+    <button id="widraw">Widraw</button>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="js/web3.min.js"></script>
+
+    <script>
+      $(document).ready(function() {
+        var address = '0xA3935A7aa34dF7D2C83875E1BF3b2b1F282E9280';
+        var abi = [
+          {
+            constant: false,
+            inputs: [
+              {
+                name: 'amt',
+                type: 'int256'
+              }
+            ],
+            name: 'deposit',
+            outputs: [],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'function'
+          },
+          {
+            constant: false,
+            inputs: [
+              {
+                name: 'amt',
+                type: 'int256'
+              }
+            ],
+            name: 'widraw',
+            outputs: [],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'function'
+          },
+          {
+            inputs: [],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'constructor'
+          },
+          {
+            constant: true,
+            inputs: [],
+            name: 'getBalance',
+            outputs: [
+              {
+                name: '',
+                type: 'int256'
+              }
+            ],
+            payable: false,
+            stateMutability: 'view',
+            type: 'function'
+          }
+        ];
+
+        web3 = new Web3(web3.currentProvider);
+
+        var contract = new web3.eth.Contract(abi, address);
+
+        function getBalance() {
+          contract.methods
+            .getBalance()
+            .call()
+            .then(function(bal) {
+              $('#balance').html(bal);
+            });
+        }
+
+        $('#deposit').click(function() {
+          var amount = $('#amount').val();
+          alert(amount);
+          contract.methods
+            .deposit(amount)
+            .call()
+            .then(function() {
+              getBalance();
+            });
+        });
+
+        $('#widraw').click(function() {
+          var amount = $('#amount').val();
+          contract.methods
+            .widraw(amount)
+            .call()
+            .then(function() {
+              getBalance();
+            });
+        });
+
+        getBalance();
+      });
+    </script>
+  </body>
+</html>
