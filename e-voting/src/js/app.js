@@ -95,6 +95,7 @@ App = {
 
         for (var i = 1; i <= count; i++) {
           electionInstance.candidates(i).then(function(candidate) {
+            // to reset table when revent received triggers the render mltiple times
             if (candidateResults[0].rows.length == count) {
               candidateResults.empty();
               candidateSelector.empty();
