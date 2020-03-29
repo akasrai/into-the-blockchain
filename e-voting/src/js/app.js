@@ -32,6 +32,21 @@ App = {
     });
   },
 
+  casteVote: function() {
+    var candidateId = $('#candidatesSelector').val();
+    App.contracts.Election.deployed()
+      .then(function(instance) {
+        return instance.vote(candidateId, { from: App.account });
+      })
+      .then(function() {
+        $('#content').hide();
+        $('#loader').show();
+      })
+      .catch(function(error) {
+        console.error(error);
+      });
+  },
+
   render: function() {
     var electionInstance;
     var loader = $('#loader');
@@ -57,6 +72,8 @@ App = {
         var candidateResults = $('#candidatesResults');
 
         candidateResults.empty();
+        var candidateSelector = $('#candidatesSelector');
+        candidateSelector.empty();
 
         for (var i = 1; i <= count; i++) {
           electionInstance.candidates(i).then(function(candidate) {
@@ -66,8 +83,16 @@ App = {
 
             var candidateTemplate = `<tr><th>${id}</th><th>${name}</th><th>${voteCount}</th></tr>`;
             candidateResults.append(candidateTemplate);
+
+            var candidateOption = `<option value='${id}'>${name}</option>`;
+            candidateSelector.append(candidateOption);
           });
         }
+
+        return electionInstance.voters(App.account);
+      })
+      .then(function(hasVoted) {
+        if (hasVoted) $('form').hide();
 
         loader.hide();
         content.show();

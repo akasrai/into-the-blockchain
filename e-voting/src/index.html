@@ -43,6 +43,16 @@
 
             <hr />
 
+            <form onSubmit="event.preventDefault(); return App.casteVote();">
+              <div class="form-group">
+                <label for="candidatesSelector">Select Candidate</label>
+                <select class="form-control" id="candidatesSelector"></select>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary">Vote</button>
+              </div>
+            </form>
+
             <p id="accountAddress" class="text-center"></p>
           </div>
         </div>
