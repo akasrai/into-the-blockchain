@@ -13,6 +13,9 @@ contract Election {
     mapping(uint256 => Candidate) public candidates;
     uint256 public candidateCount;
 
+    // voted event
+    event votedEvent(uint256 indexed _candidateId);
+
     constructor() public {
         addCandidate("Akash Rai");
         addCandidate("Bikash Rai");
@@ -31,6 +34,9 @@ contract Election {
         );
         voters[msg.sender] = true;
         candidates[_candidateId].voteCount++;
+
+        // triger voted event
+        emit votedEvent(_candidateId);
     }
 
 }

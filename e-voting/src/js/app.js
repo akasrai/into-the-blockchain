@@ -27,6 +27,7 @@ App = {
     $.getJSON('Election.json', function(election) {
       App.contracts.Election = TruffleContract(election);
       App.contracts.Election.setProvider(App.web3Provider);
+      App.listenForEvents();
 
       return App.render();
     });
@@ -45,6 +46,23 @@ App = {
       .catch(function(error) {
         console.error(error);
       });
+  },
+
+  listenForEvents: function() {
+    App.contracts.Election.deployed().then(function(instance) {
+      instance
+        .votedEvent(
+          {},
+          {
+            fromBlock: 0,
+            toBlock: 'latest'
+          }
+        )
+        .watch(function(error, event) {
+          console.log('voted event is triggred', event);
+          App.render();
+        });
+    });
   },
 
   render: function() {
@@ -70,22 +88,27 @@ App = {
       })
       .then(function(count) {
         var candidateResults = $('#candidatesResults');
+        var candidateSelector = $('#candidatesSelector');
 
         candidateResults.empty();
-        var candidateSelector = $('#candidatesSelector');
         candidateSelector.empty();
 
         for (var i = 1; i <= count; i++) {
           electionInstance.candidates(i).then(function(candidate) {
+            if (candidateResults[0].rows.length == count) {
+              candidateResults.empty();
+              candidateSelector.empty();
+            }
+
             var id = candidate[0];
             var name = candidate[1];
             var voteCount = candidate[2];
 
-            var candidateTemplate = `<tr><th>${id}</th><th>${name}</th><th>${voteCount}</th></tr>`;
-            candidateResults.append(candidateTemplate);
-
             var candidateOption = `<option value='${id}'>${name}</option>`;
+            var candidateTemplate = `<tr><th>${id}</th><th>${name}</th><th>${voteCount}</th></tr>`;
+
             candidateSelector.append(candidateOption);
+            candidateResults.append(candidateTemplate);
           });
         }
 
