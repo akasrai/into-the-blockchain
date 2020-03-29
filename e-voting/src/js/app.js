@@ -4,6 +4,8 @@ App = {
   account: '0x0',
 
   init: function() {
+    ethereum.enable();
+
     return App.initWeb3();
   },
 
@@ -23,8 +25,8 @@ App = {
 
   initContract: function() {
     $.getJSON('Election.json', function(election) {
-      App.contract.Election = TruffleContract(election);
-      App.contract.Election.setProvider(App.web3Provider);
+      App.contracts.Election = TruffleContract(election);
+      App.contracts.Election.setProvider(App.web3Provider);
 
       return App.render();
     });
@@ -45,14 +47,14 @@ App = {
       }
     });
 
-    App.contract.Election.deployed()
+    App.contracts.Election.deployed()
       .then(function(instance) {
         electionInstance = instance;
 
         return electionInstance.candidateCount();
       })
       .then(function(count) {
-        var candidateResults = $('#candidateResults');
+        var candidateResults = $('#candidatesResults');
 
         candidateResults.empty();
 
@@ -75,3 +77,9 @@ App = {
       });
   }
 };
+
+$(function() {
+  $(window).load(function() {
+    App.init();
+  });
+});
