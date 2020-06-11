@@ -1,3 +1,5 @@
+# Blockchain Terminologies
+
 ## 1\. Block
 
 A block is an individual transaction or piece of data that is being stored within the blockchain.
