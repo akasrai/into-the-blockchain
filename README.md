@@ -82,4 +82,4 @@ A number to be guessed by miners which when combined with the block produces an 
 
 ## **9\. Longest Chain**
 
-The most trusted chain with the largest amount of computational work done in calculating the Proof-of-Work
+The most trusted chain with the largest amount of computational work done in calculating the Proof-of-Work.
