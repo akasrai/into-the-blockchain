@@ -11,7 +11,7 @@
   ],
   "author": "akasky70@gmail.com",
   "dependencies": {
-    "crypto-js": "^4.0.0",
+    "crypto-js": "^4.2.0",
     "elliptic": "^6.5.4"
   }
 }
